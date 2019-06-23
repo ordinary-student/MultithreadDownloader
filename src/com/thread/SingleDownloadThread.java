@@ -9,8 +9,11 @@ import java.net.URLConnection;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
-/*
- * 单个下载线程
+/**
+ * 单个下载线程类
+ * 
+ * @author ordinary-student
+ *
  */
 public class SingleDownloadThread extends Thread
 {

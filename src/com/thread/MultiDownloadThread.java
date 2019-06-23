@@ -16,7 +16,7 @@ import com.util.PropertiesUtil;
 /**
  * 多线程下载类
  * 
- * @author jam
+ * @author ordinary-student
  *
  */
 public class MultiDownloadThread

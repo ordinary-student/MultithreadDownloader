@@ -1,22 +1,30 @@
 package com.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 import com.thread.MultiDownloadThread;
+import com.util.PropertiesUtil;
 
 /**
  * 多线程下载器窗口类
@@ -24,13 +32,17 @@ import com.thread.MultiDownloadThread;
  * @author ordinary-student
  *
  */
-public class MultithreadDownloaderFrame extends JFrame implements ActionListener
+public class MultithreadDownloaderFrame extends JFrame implements ActionListener, MouseListener
 {
 	private static final long serialVersionUID = 868625235671330285L;
 	private JPanel panel;
 	private JTextField textField;
 	private JButton button;
 	private JTextArea outputTextArea;
+	// 右键弹出菜单
+	private JPopupMenu popupMenu;
+	private JMenuItem popupMenu_clear;
+	private JMenuItem popupMenu_open;
 	private MultiDownloadThread multiDownloadThread;
 
 	/*
@@ -89,6 +101,9 @@ public class MultithreadDownloaderFrame extends JFrame implements ActionListener
 		// 信息输出区域
 		outputTextArea = new JTextArea(20, 50);
 		outputTextArea.setFont(new Font("Microsoft YaHei", Font.PLAIN, 16));
+		outputTextArea.setEditable(false);
+		// 添加鼠标监听
+		outputTextArea.addMouseListener(this);
 
 		// 创建带滚动条的面板
 		JScrollPane scroller = new JScrollPane(outputTextArea);
@@ -96,6 +111,21 @@ public class MultithreadDownloaderFrame extends JFrame implements ActionListener
 
 		// 向窗口添加信息输出区
 		getContentPane().add(scroller);
+
+		// 右键菜单
+		popupMenu = new JPopupMenu();
+		// 清空记录-右键菜单项
+		popupMenu_clear = new JMenuItem("清空记录");
+		popupMenu_clear.addActionListener(this);
+		popupMenu.add(popupMenu_clear);
+
+		// 分隔线
+		popupMenu.addSeparator();
+
+		// 打开下载目录-右键菜单项
+		popupMenu_open = new JMenuItem("打开下载目录");
+		popupMenu_open.addActionListener(this);
+		popupMenu.add(popupMenu_open);
 
 		validate();
 		// 设置可视
@@ -105,11 +135,31 @@ public class MultithreadDownloaderFrame extends JFrame implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		// 检查下载地址
-		if (checkUrl())
+		// 判断来源
+		if (e.getSource() == button)
 		{
-			// 下载
-			download(textField.getText().replaceAll(" ", ""));
+			// 检查下载地址
+			if (checkUrl())
+			{
+				// 下载
+				download(textField.getText().replaceAll(" ", ""));
+			}
+		} else if (e.getSource() == popupMenu_clear)
+		{
+			// 清空记录
+			outputTextArea.setText("");
+
+		} else if (e.getSource() == popupMenu_open)
+		{
+			try
+			{
+				// 打开下载目录
+				Desktop.getDesktop().open(new File(PropertiesUtil.downloadDir));
+			} catch (IOException e1)
+			{
+				e1.printStackTrace();
+				JOptionPane.showMessageDialog(this, "打开失败！");
+			}
 		}
 
 	}
@@ -152,6 +202,46 @@ public class MultithreadDownloaderFrame extends JFrame implements ActionListener
 			JOptionPane.showMessageDialog(outputTextArea, "下载出错！", "错误", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
+
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e)
+	{
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e)
+	{
+		// 判断是否触发弹出菜单事件
+		if (e.isPopupTrigger())
+		{
+			// 显示弹出菜单
+			popupMenu.show(e.getComponent(), e.getX(), e.getY());
+		}
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e)
+	{
+		// 判断是否触发弹出菜单事件
+		if (e.isPopupTrigger())
+		{
+			// 显示弹出菜单
+			popupMenu.show(e.getComponent(), e.getX(), e.getY());
+		}
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e)
+	{
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e)
+	{
 
 	}
 

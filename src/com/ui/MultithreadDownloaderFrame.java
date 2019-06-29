@@ -11,9 +11,9 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -68,19 +68,14 @@ public class MultithreadDownloaderFrame extends JFrame implements ActionListener
 		// 设置最小的大小
 		setMinimumSize(new Dimension(600, 200));
 		// 设置布局
-		getContentPane().setLayout(new BorderLayout(0, 0));
+		getContentPane().setLayout(new BorderLayout(5, 5));
 		// 设置关闭方式
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		// 创建面板
 		panel = new JPanel();
-		panel.setPreferredSize(new Dimension(600, 50));
-
-		// 标签
-		JLabel label = new JLabel("下载地址：");
-		label.setPreferredSize(new Dimension(100, 30));
-		label.setFont(new Font("Microsoft YaHei", Font.PLAIN, 15));
-		panel.add(label, BorderLayout.WEST);
+		panel.setBorder(BorderFactory.createTitledBorder("填写下载地址"));
+		panel.setLayout(new BorderLayout(5, 5));
 
 		// 输入框
 		textField = new JTextField();
@@ -110,7 +105,7 @@ public class MultithreadDownloaderFrame extends JFrame implements ActionListener
 		scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		// 向窗口添加信息输出区
-		getContentPane().add(scroller);
+		getContentPane().add(scroller, BorderLayout.CENTER);
 
 		// 右键菜单
 		popupMenu = new JPopupMenu();

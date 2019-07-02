@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -69,6 +70,8 @@ public class MultithreadDownloaderFrame extends JFrame implements ActionListener
 		setMinimumSize(new Dimension(600, 200));
 		// 设置布局
 		getContentPane().setLayout(new BorderLayout(5, 5));
+		// 设置边框
+		((JComponent) getContentPane()).setBorder(BorderFactory.createTitledBorder(""));
 		// 设置关闭方式
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
